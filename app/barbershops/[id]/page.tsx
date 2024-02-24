@@ -1,4 +1,6 @@
 import { db } from "@/app/_lib/prisma";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { getServerSession } from "next-auth";
 import BarbershopHeading from "./_components/barbershop-heading";
 import ServiceItem from "./_components/service-item";
 
@@ -28,13 +30,21 @@ const BarbershopDetailsPage = async ({
     return null;
   }
 
+  const session = await getServerSession(authOptions);
+
   return (
     <div className="">
       <BarbershopHeading barbershop={barbershop} />
 
       <div className="px-5 space-y-4 py-4">
         {barbershop.services.map((service) => {
-          return <ServiceItem key={service.id} service={service} />;
+          return (
+            <ServiceItem
+              key={service.id}
+              service={service}
+              isAuthenticated={!!session?.user}
+            />
+          );
         })}
       </div>
     </div>
