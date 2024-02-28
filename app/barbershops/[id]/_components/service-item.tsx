@@ -133,13 +133,13 @@ const ServiceItem = ({
     }
 
     const refreshAvailableHours = async () => {
-      const days = await getDayBookings(date);
+      const days = await getDayBookings(barbershop.id, date);
 
       setDayBookings(days);
     };
 
     refreshAvailableHours();
-  }, [date]);
+  }, [barbershop.id, date]);
 
   return (
     <Card>
