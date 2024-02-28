@@ -11,16 +11,17 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/app/_components/ui/sheet";
-import { Barbershop, Service } from "@prisma/client";
+import { Barbershop, Booking, Service } from "@prisma/client";
 import { format, setHours, setMinutes } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Loader2 } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { createBooking } from "../_actions/create-booking";
+import { getDayBookings } from "../_actions/get-day-bookings";
 import { generateDayTimeList } from "../_helpers/hours";
 import { priceFormat } from "../_helpers/price-format";
 
@@ -41,6 +42,9 @@ const ServiceItem = ({
   const [hour, setHour] = useState<string | undefined>(undefined);
   const [submitIsLoading, setSubmitIsLoading] = useState<boolean>(false);
   const [sheetIsOpen, setSheetIsOpen] = useState<boolean>(false);
+  const [dayBookings, setDayBookings] = useState<Booking[]>([]);
+
+  console.log(dayBookings);
 
   const handleDateClick = (currDate: Date | undefined) => {
     setDate(currDate);
@@ -100,7 +104,41 @@ const ServiceItem = ({
   };
 
   const timeList = useMemo(() => {
-    return date ? generateDayTimeList(date) : [];
+    if (!date) {
+      return [];
+    }
+
+    return generateDayTimeList(date).filter((time) => {
+      const timeHour = Number(time.split(":")[0]);
+      const timeMinutes = Number(time.split(":")[1]);
+
+      const bookings = dayBookings.find((booking) => {
+        const bookingHour = booking.date.getHours();
+        const bookingMinutes = booking.date.getMinutes();
+
+        return bookingHour === timeHour && bookingMinutes === timeMinutes;
+      });
+
+      if (!bookings) {
+        return true;
+      }
+
+      return false;
+    });
+  }, [date, dayBookings]);
+
+  useEffect(() => {
+    if (!date) {
+      return;
+    }
+
+    const refreshAvailableHours = async () => {
+      const days = await getDayBookings(date);
+
+      setDayBookings(days);
+    };
+
+    refreshAvailableHours();
   }, [date]);
 
   return (
