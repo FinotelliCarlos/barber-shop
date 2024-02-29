@@ -171,7 +171,7 @@ const ServiceItem = ({
                   </Button>
                 </SheetTrigger>
                 <SheetContent className="p-0 flex flex-col justify-between">
-                  <div className="overflow-y-auto [&::-webkit-scrollbar]:hidden w-full">
+                  <div className="overflow-y-auto [&::-webkit-scrollbar]:hidden">
                     <SheetHeader className="text-left px-5 py-6 border-b border-solid border-secondary">
                       <SheetTitle>Fazer reserva</SheetTitle>
                     </SheetHeader>
