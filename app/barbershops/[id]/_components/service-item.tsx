@@ -12,7 +12,7 @@ import {
   SheetTrigger,
 } from "@/app/_components/ui/sheet";
 import { Barbershop, Booking, Service } from "@prisma/client";
-import { format, setHours, setMinutes } from "date-fns";
+import { addDays, format, setHours, setMinutes } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Loader2 } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
@@ -44,8 +44,6 @@ const ServiceItem = ({
   const [submitIsLoading, setSubmitIsLoading] = useState<boolean>(false);
   const [sheetIsOpen, setSheetIsOpen] = useState<boolean>(false);
   const [dayBookings, setDayBookings] = useState<Booking[]>([]);
-
-  console.log(dayBookings);
 
   const handleDateClick = (currDate: Date | undefined) => {
     setDate(currDate);
@@ -99,7 +97,7 @@ const ServiceItem = ({
         },
       });
     } catch (error) {
-      console.log(error);
+      return String(error);
     } finally {
       setSubmitIsLoading(false);
     }
@@ -184,7 +182,7 @@ const ServiceItem = ({
                         selected={date}
                         onSelect={handleDateClick}
                         locale={ptBR}
-                        fromDate={new Date()}
+                        fromDate={addDays(new Date(), 1)}
                         styles={{
                           head_cell: {
                             width: "100%",
