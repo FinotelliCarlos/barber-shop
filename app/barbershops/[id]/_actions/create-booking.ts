@@ -1,12 +1,14 @@
 "use server";
 
 import { db } from "@/app/_lib/prisma";
+import { revalidatePath } from "next/cache";
 
 interface createBookingParams {
   barbershopId: string;
   serviceId: string;
   userId: string;
   date: Date;
+  localePath: string;
 }
 
 export const createBooking = async ({
@@ -14,6 +16,7 @@ export const createBooking = async ({
   serviceId,
   userId,
   date,
+  localePath,
 }: createBookingParams) => {
   await db.booking.create({
     data: {
@@ -23,4 +26,6 @@ export const createBooking = async ({
       date,
     },
   });
+
+  revalidatePath(localePath);
 };

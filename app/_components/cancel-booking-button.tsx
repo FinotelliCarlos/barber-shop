@@ -6,6 +6,17 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { cancelBooking } from "../_actions/cancel-booking";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "./ui/alert-dialog";
 import { Button } from "./ui/button";
 
 interface CancelBookingButtonProps {
@@ -39,15 +50,38 @@ const CancelBookingButton = ({
   };
 
   return (
-    <Button
-      disabled={!isConfirmed || cancelLoading}
-      className="w-full"
-      variant="destructive"
-      onClick={handleCancelBooking}
-    >
-      {cancelLoading && <Loader2 className="animate-spin size-4 mr-2" />}
-      Cancelar Reserva
-    </Button>
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button
+          disabled={!isConfirmed}
+          className="w-full"
+          variant="destructive"
+        >
+          {cancelLoading && <Loader2 className="animate-spin size-4 mr-2" />}
+          Cancelar Reserva
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Deseja cancelar esta reserva?</AlertDialogTitle>
+          <AlertDialogDescription>
+            Uma vez cancelada não é possivel reverter essa ação!
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+
+        <AlertDialogFooter className="flex-row gap-3">
+          <AlertDialogCancel className="w-full m-0">Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            className="w-full"
+            onClick={handleCancelBooking}
+            disabled={cancelLoading}
+          >
+            {cancelLoading && <Loader2 className="animate-spin size-4 mr-2" />}
+            Confirmar
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };
 

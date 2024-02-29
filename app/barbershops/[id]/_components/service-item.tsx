@@ -17,7 +17,7 @@ import { ptBR } from "date-fns/locale";
 import { Loader2 } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { createBooking } from "../_actions/create-booking";
@@ -38,6 +38,7 @@ const ServiceItem = ({
 }: ServiceItemProps) => {
   const router = useRouter();
   const { data } = useSession();
+  const pathname = usePathname();
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [hour, setHour] = useState<string | undefined>(undefined);
   const [submitIsLoading, setSubmitIsLoading] = useState<boolean>(false);
@@ -82,6 +83,7 @@ const ServiceItem = ({
         serviceId: service.id,
         userId: (data?.user as any).id,
         date: newDate,
+        localePath: pathname,
       });
 
       setSheetIsOpen(false);
