@@ -2,8 +2,8 @@
 
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
+import { authOptions } from "../_lib/auth";
 import { db } from "../_lib/prisma";
-import { authOptions } from "../api/auth/[...nextauth]/route";
 
 interface CancelBookingParams {
   userId: string;
