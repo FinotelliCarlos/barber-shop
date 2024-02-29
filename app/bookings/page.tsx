@@ -1,4 +1,3 @@
-import { isFuture, isPast } from "date-fns";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import BookingItem from "../_components/booking-item";
@@ -13,21 +12,35 @@ const BookingsPage = async () => {
     return redirect("/");
   }
 
-  const bookings = await db.booking.findMany({
-    where: {
-      userId: (session.user as any)?.id,
-    },
-    include: {
-      service: true,
-      barbershop: true,
-    },
-  });
+  const [confirmedBookings, finishedBookings] = await Promise.all([
+    // confirmed
+    db.booking.findMany({
+      where: {
+        userId: (session?.user as any)?.id,
+        date: {
+          gte: new Date(),
+        },
+      },
+      include: {
+        service: true,
+        barbershop: true,
+      },
+    }),
 
-  const confirmedBookings = bookings.filter((booking) =>
-    isFuture(booking.date)
-  );
-
-  const finishedBookings = bookings.filter((booking) => isPast(booking.date));
+    // finished
+    db.booking.findMany({
+      where: {
+        userId: (session?.user as any)?.id,
+        date: {
+          lt: new Date(),
+        },
+      },
+      include: {
+        service: true,
+        barbershop: true,
+      },
+    }),
+  ]);
 
   return (
     <>
@@ -35,15 +48,19 @@ const BookingsPage = async () => {
       <div className="px-5 py-6 space-y-6">
         <h1 className="text-xl font-bold">Agendamentos</h1>
 
-        <h2 className="uppercase text-gray-400 font-bold text-sm">
-          Confirmados
-        </h2>
+        {confirmedBookings.length !== 0 && (
+          <>
+            <h2 className="uppercase text-gray-400 font-bold text-sm">
+              Confirmados
+            </h2>
 
-        <div className="space-y-3 mt-3">
-          {confirmedBookings.map((booking) => {
-            return <BookingItem key={booking.id} booking={booking} />;
-          })}
-        </div>
+            <div className="space-y-3 mt-3">
+              {confirmedBookings.map((booking) => {
+                return <BookingItem key={booking.id} booking={booking} />;
+              })}
+            </div>
+          </>
+        )}
 
         <h2 className="uppercase text-gray-400 font-bold text-sm">
           Finalizados
