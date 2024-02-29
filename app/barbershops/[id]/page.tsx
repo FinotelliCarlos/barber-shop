@@ -36,7 +36,7 @@ const BarbershopDetailsPage = async ({
     <div className="">
       <BarbershopHeading barbershop={barbershop} />
 
-      <div className="px-5 space-y-4 py-4">
+      <div className="px-5 space-y-4 py-4 container">
         {barbershop.services.map((service) => {
           return (
             <ServiceItem

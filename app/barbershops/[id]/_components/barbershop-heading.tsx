@@ -1,6 +1,12 @@
 "use client";
 
+import Header from "@/app/_components/header";
 import SideMenu from "@/app/_components/side-menu";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/app/_components/ui/avatar";
 import { Button } from "@/app/_components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/app/_components/ui/sheet";
 import { Barbershop } from "@prisma/client";
@@ -21,7 +27,10 @@ const BarbershopHeading = ({ barbershop }: BarbershopHeadingProps) => {
 
   return (
     <div className="">
-      <div className="h-[250px] w-full relative">
+      <div className="hidden sm:block">
+        <Header />
+      </div>
+      <div className="h-[250px] container relative block sm:hidden">
         <Button
           variant="outline"
           size="icon"
@@ -62,15 +71,24 @@ const BarbershopHeading = ({ barbershop }: BarbershopHeadingProps) => {
         />
       </div>
 
-      <div className="pt-3 px-3 pb-6 border-solid border-b border-secondary space-y-2">
-        <h1 className="font-bold text-xl">{barbershop.name}</h1>
-        <div className="flex items-center gap-1">
-          <MapPinIcon className="text-primary" size={18} />
-          <p className="text-sm">{barbershop.address}</p>
+      <div className="flex flex-row gap-3 items-center justify-start border-solid border-b border-secondary container pt-3 px-3 pb-6 ">
+        <div className="hidden sm:block">
+          <Avatar className="size-16">
+            <AvatarImage src={barbershop.imageUrl} />
+            <AvatarFallback>{barbershop.name.charAt(0)}</AvatarFallback>
+          </Avatar>
         </div>
-        <div className="flex items-center gap-1">
-          <StarIcon className="text-primary" size={18} />
-          <p className="text-sm">4.7 (754 avaliações)</p>
+
+        <div className="space-y-2">
+          <h1 className="font-bold text-xl">{barbershop.name}</h1>
+          <div className="flex items-center gap-1">
+            <MapPinIcon className="text-primary" size={18} />
+            <p className="text-sm">{barbershop.address}</p>
+          </div>
+          <div className="flex items-center gap-1">
+            <StarIcon className="text-primary" size={18} />
+            <p className="text-sm">4.7 (754 avaliações)</p>
+          </div>
         </div>
       </div>
     </div>

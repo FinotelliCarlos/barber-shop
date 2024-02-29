@@ -45,7 +45,7 @@ const BookingsPage = async () => {
   return (
     <>
       <Header />
-      <div className="px-5 py-6 space-y-6">
+      <div className="px-5 py-6 space-y-6 container">
         <h1 className="text-xl font-bold">Agendamentos</h1>
 
         {confirmedBookings.length !== 0 && (
@@ -54,7 +54,7 @@ const BookingsPage = async () => {
               Agendamentos ({confirmedBookings.length})
             </h2>
 
-            <div className="space-y-3 mt-3">
+            <div className="grid sm:grid-cols-2 grid-cols-1 mt-3 gap-3">
               {confirmedBookings.map((booking) => {
                 return <BookingItem key={booking.id} booking={booking} />;
               })}
@@ -68,7 +68,7 @@ const BookingsPage = async () => {
               Finalizados ({finishedBookings.length})
             </h2>
 
-            <div className="space-y-3 mt-3">
+            <div className="grid sm:grid-cols-2 grid-cols-1 mt-3 gap-3">
               {finishedBookings.map((booking) => {
                 return <BookingItem key={booking.id} booking={booking} />;
               })}
