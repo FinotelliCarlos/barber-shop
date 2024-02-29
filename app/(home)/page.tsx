@@ -12,24 +12,32 @@ import Search from "./_components/search";
 export default async function Home() {
   const session = await getServerSession(authOptions);
 
-  const [barbershops, confirmedBookings] = await Promise.all([
-    // get all barbershops
-    db.barbershop.findMany({}),
+  const [barbershops, recomendedBarbershops, confirmedBookings] =
+    await Promise.all([
+      // get all barbershops
+      db.barbershop.findMany({}),
 
-    // get bookings
-    db.booking.findMany({
-      where: {
-        userId: (session?.user as any)?.id,
-        date: {
-          gte: new Date(),
+      // recomended sort
+      db.barbershop.findMany({
+        orderBy: {
+          id: "asc",
         },
-      },
-      include: {
-        service: true,
-        barbershop: true,
-      },
-    }),
-  ]);
+      }),
+
+      // get bookings
+      db.booking.findMany({
+        where: {
+          userId: (session?.user as any)?.id,
+          date: {
+            gte: new Date(),
+          },
+        },
+        include: {
+          service: true,
+          barbershop: true,
+        },
+      }),
+    ]);
 
   return (
     <div className="">
@@ -69,9 +77,11 @@ export default async function Home() {
         </h2>
 
         <div className="flex px-5 gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden">
-          {barbershops.map((barbershop) => {
+          {recomendedBarbershops.map((barbershop) => {
             return (
-              <BarberShopItem key={barbershop.id} barbershop={barbershop} />
+              <div key={barbershop.id} className="min-w-[167px] max-w-[167px]">
+                <BarberShopItem barbershop={barbershop} />
+              </div>
             );
           })}
         </div>
@@ -85,7 +95,9 @@ export default async function Home() {
         <div className="flex px-5 gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden">
           {barbershops.map((barbershop) => {
             return (
-              <BarberShopItem key={barbershop.id} barbershop={barbershop} />
+              <div key={barbershop.id} className="min-w-[167px] max-w-[167px]">
+                <BarberShopItem barbershop={barbershop} />
+              </div>
             );
           })}
         </div>
