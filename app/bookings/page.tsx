@@ -48,7 +48,7 @@ const BookingsPage = async () => {
       <div className="px-5 py-6 space-y-6 container">
         <h1 className="text-xl font-bold">Agendamentos</h1>
 
-        {confirmedBookings.length !== 0 && (
+        {confirmedBookings.length !== 0 ? (
           <>
             <h2 className="uppercase text-gray-400 font-bold text-sm">
               Agendamentos ({confirmedBookings.length})
@@ -60,6 +60,10 @@ const BookingsPage = async () => {
               })}
             </div>
           </>
+        ) : (
+          <h2 className="text-red-300 font-bold text-sm">
+            Que pena não há reservas feitas 🥲
+          </h2>
         )}
 
         {finishedBookings.length !== 0 && (

@@ -2,7 +2,7 @@ import { Prisma } from "@prisma/client";
 import { format, isFuture } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import Image from "next/image";
-import { priceFormat } from "../barbershops/[id]/_helpers/price-format";
+import BookingInfo from "./booking-info";
 import CancelBookingButton from "./cancel-booking-button";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
@@ -84,12 +84,6 @@ const BookingItem = ({ booking }: BookingItemProps) => {
         <div className="overflow-y-auto [&::-webkit-scrollbar]:hidden px-5">
           <SheetHeader className="px-5 text-left py-6 border-b border-solid border-secondary">
             <SheetTitle>Informações da reserva</SheetTitle>
-            {/* <SheetDescription>
-            {booking.service.name},{" "}
-            {format(booking.date, "'para' dd 'de' MMMM 'ás' HH':'mm", {
-              locale: ptBR,
-            })}
-          </SheetDescription> */}
           </SheetHeader>
 
           <div className="relative h-[180px] w-full mt-6">
@@ -128,41 +122,13 @@ const BookingItem = ({ booking }: BookingItemProps) => {
             {bookingConfirmed ? "Confirmado" : "Finalizado"}
           </Badge>
 
-          <Card>
-            <CardContent className="p-3 space-y-3">
-              <div className="flex justify-between items-center">
-                <h2 className="font-bold">{booking.service.name}</h2>
-                <h3 className="text-sm font-bold">
-                  {priceFormat(Number(booking.service.price))}
-                </h3>
-              </div>
-
-              {booking.date && (
-                <div className="flex justify-between items-center">
-                  <h3 className="text-gray-400">Data</h3>
-                  <h4 className="text-sm">
-                    {format(booking.date, "dd' de 'MMMM'", {
-                      locale: ptBR,
-                    })}
-                  </h4>
-                </div>
-              )}
-
-              <div className="flex justify-between items-center">
-                <h3 className="text-gray-400">Horário</h3>
-                <h4 className="text-sm">
-                  {format(booking.date, "hh:mm", {
-                    locale: ptBR,
-                  })}
-                </h4>
-              </div>
-
-              <div className="flex justify-between items-center">
-                <h3 className="text-gray-400">Barbearia</h3>
-                <h4 className="text-sm">{booking.barbershop.name}</h4>
-              </div>
-            </CardContent>
-          </Card>
+          <BookingInfo
+            booking={{
+              barbershop: booking.barbershop,
+              service: booking.service,
+              date: booking.date,
+            }}
+          />
         </div>
 
         <SheetFooter className="mt-6 flex-row gap-3 px-5 pb-6">

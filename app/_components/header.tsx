@@ -1,5 +1,4 @@
 import { MenuIcon } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import SideMenu from "./side-menu";
 import { Button } from "./ui/button";
@@ -12,13 +11,9 @@ const Header = () => {
       <Card>
         <CardContent className="flex justify-between flex-row items-center mx-auto p-5">
           <Link href="/">
-            <Image
-              src="/logo.png"
-              alt="Barber Shop Logo"
-              height={22}
-              width={120}
-              loading="eager"
-            />
+            <h1 className="text-primary font-bold text-2xl text-center">
+              Barber<strong className="text-white">Shop</strong>
+            </h1>
           </Link>
 
           <Sheet>

@@ -36,14 +36,20 @@ const BarbershopsPage = async ({
           Resultados para &quot;{search}&quot;
         </h1>
 
-        <div className="grid grid-cols-2 mt-3 gap-4">
-          {barbershops.map((barbershop) => {
-            return (
-              <div key={barbershop.id} className="w-full">
-                <BarberShopItem barbershop={barbershop} />
-              </div>
-            );
-          })}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 mt-3 gap-4">
+          {barbershops.length !== 0 ? (
+            barbershops.map((barbershop) => {
+              return (
+                <div key={barbershop.id} className="w-full">
+                  <BarberShopItem barbershop={barbershop} />
+                </div>
+              );
+            })
+          ) : (
+            <h2 className="text-red-400 font-bold text-sm">
+              Que pena não há resultados para &quot;{search}&quot;
+            </h2>
+          )}
         </div>
       </div>
     </>
